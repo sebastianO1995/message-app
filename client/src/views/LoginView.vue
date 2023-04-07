@@ -16,13 +16,29 @@
           Clone
         </div>
         <div class="w-full flex justify-center bg-[#191919] p-3 rounded-md">
-          <GoogleLogin />
+          <GoogleLogin :callback="callback" />
         </div>
       </div>
     </div>
   </div>
 </template>
-<script lang="ts">
-  export default {};
+<script lang="ts" setup>
+  import axios from 'axios';
+
+  interface GoogleLoginResponse {
+    clientId: string;
+    client_id: string;
+    credential: string;
+    select_by: string;
+  }
+  const callback = async (response: GoogleLoginResponse) => {
+    try {
+      let res = await axios.post('http://localhost:4001/api/google-login', {
+        token: response.credential
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 </script>
 <style lang=""></style>

@@ -18,5 +18,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import CheckAllIcon from 'vue3-material-design-icons-ts/dist/CheckAll.vue';
+</script>
 <style></style>
