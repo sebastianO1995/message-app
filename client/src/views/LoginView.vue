@@ -23,24 +23,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import axios from 'axios';
-
-  interface GoogleLoginResponse {
-    clientId: string;
-    client_id: string;
-    credential: string;
-    select_by: string;
-  }
+  import { useRouter } from 'vue-router';
+  import { GoogleLoginResponse } from '../interfaces';
+  import { useUserStore } from '../store/user-store';
+  const userStore = useUserStore();
+  const router = useRouter();
   const callback = async (response: GoogleLoginResponse) => {
-    try {
-      const res = await axios.post('http://localhost:4001/api/google-login', {
-        token: response.credential
-      });
-
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    await userStore.getUserDetailsFromGoolge(response);
+    setTimeout(() => {
+      router.push('/');
+    }, 200);
   };
 </script>
 <style lang=""></style>

@@ -4,13 +4,14 @@
       <div
         class="bg-[#f0f0f0] w-full flex justify-between items-center px-3 py-2"
       >
-        <img
-          class="rounded-full ml-1 w-10"
-          src="https://random.imagecdn.app/100/100"
-        />
+        <img class="rounded-full ml-1 w-10" :src="userStore.picture || ''" />
         <div class="flex items-center justify-center">
           <AccountGroupIcon fill-color="#515151" class="mr-6" />
-          <DotsVerticalIcon fill-color="#515151" class="cursor-pointer" />
+          <DotsVerticalIcon
+            fill-color="#515151"
+            @click="logout"
+            class="cursor-pointer"
+          />
         </div>
       </div>
       <div id="Search" class="bg-white w-full px-2 border-b shadow-sm">
@@ -66,9 +67,23 @@
   import ChatsView from './ChatsView.vue';
   import MessageView from './MessageView.vue';
   import FindFriendsView from './FindFriendsView.vue';
+  import { useUserStore } from '../store/user-store';
+  import { useRouter } from 'vue-router';
 
   import { ref } from 'vue';
+  const userStore = useUserStore();
   const open = ref(true);
   const showFindFriends = ref(false);
+
+  const router = useRouter();
+
+  const logout = () => {
+    const res = confirm('Are you sure you want to logout?');
+
+    if (res) {
+      userStore.logout();
+      router.push('/login');
+    }
+  };
 </script>
 <style lang="css"></style>
