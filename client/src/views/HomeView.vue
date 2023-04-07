@@ -59,6 +59,7 @@
   import DotsVerticalIcon from 'vue3-material-design-icons-ts/dist/DotsVertical.vue';
   import MagnifyIcon from 'vue3-material-design-icons-ts/dist/Magnify.vue';
   import ChatsView from './ChatsView.vue';
+  import MessageView from './MessageView.vue';
 
   import { ref } from 'vue';
   const open = ref(true);
