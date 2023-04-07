@@ -1,6 +1,7 @@
 <template>
   <div class="ml-[420px] w-full">
     <div class="w-full">
+      <div id="BG"></div>
       <div class="border-l border-green-500 w-full">
         <div
           class="bg-[#f0f0f0] fixed z-10 min-w-[calc(100vw-420px)] flex justify-between items-center px-2 py-2"
@@ -66,4 +67,14 @@
   import PaperclipIcon from 'vue3-material-design-icons-ts/dist/Paperclip.vue';
   import SendIcon from 'vue3-material-design-icons-ts/dist/Send.vue';
 </script>
-<style lang=""></style>
+<style scoped>
+  #BG {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
+    background: teal;
+    /* TODO ADD IMAGE BACKGROUND */
+    /* background: url() no-repeat center;  */
+  }
+</style>

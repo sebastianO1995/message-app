@@ -27,8 +27,12 @@
         </div>
       </div>
     </div>
-    <ChatsView class="mt-[100px]" />
-
+    <div v-if="showFindFriends">
+      <ChatsView class="mt-[100px]" />
+    </div>
+    <div v-else>
+      <FindFriendsView class="pt-28" />
+    </div>
     <div v-if="open">
       <MessageView />
     </div>
@@ -39,6 +43,7 @@
         <div class="grid h-screen place-items-center">
           <div>
             <div class="w-full flex items-center justify-center">
+              <!-- TODO add image  -->
               <img width="375" src="https://random.imagecdn.app/400/200" />
             </div>
             <div class="text-[32px] text-gray-500 font-light mt-10">
@@ -60,8 +65,10 @@
   import MagnifyIcon from 'vue3-material-design-icons-ts/dist/Magnify.vue';
   import ChatsView from './ChatsView.vue';
   import MessageView from './MessageView.vue';
+  import FindFriendsView from './FindFriendsView.vue';
 
   import { ref } from 'vue';
   const open = ref(true);
+  const showFindFriends = ref(false);
 </script>
 <style lang="css"></style>
