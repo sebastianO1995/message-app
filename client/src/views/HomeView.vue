@@ -20,6 +20,7 @@
         >
           <MagnifyIcon fill-color="#515151" class="ml-2" :size="18" />
           <input
+            @click="showFindFriends = !showFindFriends"
             type="text"
             autocomplete="off"
             placeholder="Start a new chat"
@@ -34,7 +35,7 @@
     <div v-else>
       <FindFriendsView class="pt-28" />
     </div>
-    <div v-if="open">
+    <div v-if="userDataForChat.length">
       <MessageView />
     </div>
     <div v-else>
@@ -69,14 +70,22 @@
   import FindFriendsView from './FindFriendsView.vue';
   import { useUserStore } from '../store/user-store';
   import { useRouter } from 'vue-router';
-
-  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
+  import { onMounted } from 'vue';
   const userStore = useUserStore();
-  const open = ref(true);
-  const showFindFriends = ref(false);
+
+  const { showFindFriends, userDataForChat } = storeToRefs(userStore);
 
   const router = useRouter();
 
+  onMounted(async () => {
+    try {
+      userStore.getAllUsers();
+      await userStore.getAllChatsByUser();
+    } catch (error) {
+      console.log(error);
+    }
+  });
   const logout = () => {
     const res = confirm('Are you sure you want to logout?');
 
