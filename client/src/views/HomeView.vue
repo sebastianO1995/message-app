@@ -81,7 +81,7 @@
   onMounted(async () => {
     try {
       userStore.getAllUsers();
-      await userStore.getAllChatsByUser();
+      userStore.getAllChatsByUser();
     } catch (error) {
       console.log(error);
     }
