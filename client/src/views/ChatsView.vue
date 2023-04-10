@@ -13,12 +13,12 @@
 <script setup lang="ts">
   import { useUserStore } from '@/store/user-store';
   import MessageRow from '../components/MessageRow.vue';
-  import { Chat } from '../interfaces';
+  import { Chat, ChatViewed } from '../interfaces';
   import { storeToRefs } from 'pinia';
   import { onMounted } from 'vue';
   const userStore = useUserStore();
 
-  const { chats, userDataForChat } = storeToRefs(userStore);
+  const { chats, userDataForChat, sub } = storeToRefs(userStore);
 
   onMounted(async () => {
     if (userDataForChat.value.length) {
@@ -41,6 +41,20 @@
 
     try {
       await userStore.getChatById(chat.id);
+      const data: ChatViewed = {
+        id: chat.id,
+        key1: 'sub1HasViewed',
+        val1: false,
+        key2: 'sub2HasViewed',
+        val2: false
+      };
+
+      if (chat.sub1 === sub.value || chat.sub2 === sub.value) {
+        data.val1 = true;
+        data.val2 = true;
+      }
+
+      await userStore.hasReadMessage(data);
     } catch (error) {
       console.log(error);
     }

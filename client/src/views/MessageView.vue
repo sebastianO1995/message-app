@@ -8,10 +8,16 @@
         >
           <div class="flex items-center">
             <img
+              v-if="userDataForChat[0]?.picture"
               class="rounded-full mx-1 w-10"
-              src="https://random.imagecdn.app/100/100"
+              :src="userDataForChat[0].picture"
             />
-            <div class="text-gray-900 ml-1 font-semibold">Bob</div>
+            <div
+              class="text-gray-900 ml-1 font-semibold"
+              v-if="userDataForChat[0]?.firstName"
+            >
+              {{ userDataForChat[0].firstName }}
+            </div>
           </div>
           <DotsVerticalIcon fill-color="#515151" />
         </div>
@@ -55,6 +61,7 @@
           />
           <button
             @click="sendMessage"
+            :disabled="disableBtn"
             class="ml-3 p-2 w-12 flex items-center justify-center"
           >
             <SendIcon fill-color="#515151" />
@@ -70,20 +77,63 @@
   import PaperclipIcon from 'vue3-material-design-icons-ts/dist/Paperclip.vue';
   import SendIcon from 'vue3-material-design-icons-ts/dist/Send.vue';
   import { useUserStore } from '@/store/user-store';
-
-  import { ref } from 'vue';
+  import { ChatViewed } from '@/interfaces';
+  import { ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
 
   const message = ref('');
+  const disableBtn = ref(false);
   const userStore = useUserStore();
   const { userDataForChat, currentChat, sub } = storeToRefs(userStore);
+
+  watch(
+    () => currentChat.value,
+    (chat) => {
+      if (chat?.length) {
+        setTimeout(() => {
+          const objDiv = document.getElementById('MessagesSection');
+          if (objDiv) {
+            objDiv.scrollTop = objDiv.scrollHeight;
+          }
+        }, 50);
+      }
+    },
+    { deep: true }
+  );
   const sendMessage = async () => {
+    if (message.value === '') return;
+    disableBtn.value = true;
     await userStore.sendMessage({
       message: message.value,
       sub2: userDataForChat.value[0].sub2,
       chatId: userDataForChat.value[0].id
     });
     message.value = '';
+    const userData = userDataForChat.value[0];
+    const data: ChatViewed = {
+      id: userData.id,
+      key1: 'sub1HasViewed',
+      val1: false,
+      key2: 'sub2HasViewed',
+      val2: false
+    };
+
+    if (userData.sub1 === sub.value) {
+      data.val1 = true;
+      data.val2 = false;
+    } else if (userData.sub2 === sub.value) {
+      data.val1 = false;
+      data.val2 = true;
+    }
+
+    await userStore.hasReadMessage(data);
+
+    const objDiv = document.getElementById('MessagesSection');
+    if (objDiv) {
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    disableBtn.value = false;
   };
 </script>
 <style scoped>

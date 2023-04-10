@@ -48,3 +48,11 @@ export interface Chat {
   messages: Message[];
   user?: User;
 }
+
+export interface ChatViewed {
+  id: string;
+  key1: string;
+  val1: boolean;
+  key2: string;
+  val2: boolean;
+}

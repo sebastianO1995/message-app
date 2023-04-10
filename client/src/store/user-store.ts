@@ -11,7 +11,13 @@ import {
   query
 } from 'firebase/firestore';
 
-import { GoogleLoginResponse, UserState, Message, Chat } from '../interfaces';
+import {
+  GoogleLoginResponse,
+  UserState,
+  Message,
+  Chat,
+  ChatViewed
+} from '../interfaces';
 import axios from 'axios';
 import { db } from '../firebase-init';
 import { defineStore } from 'pinia';
@@ -182,6 +188,18 @@ export const useUserStore = defineStore('user', {
         console.log(error);
       }
     },
+
+    async hasReadMessage(data: ChatViewed) {
+      await updateDoc(
+        doc(db, `chat/${data.id}`),
+        {
+          [data.key1]: data.val1,
+          [data.key2]: data.val2
+        },
+        { merge: true }
+      );
+    },
+
     logout() {
       this.sub = '';
       this.email = '';
