@@ -1,3 +1,5 @@
+import { DocumentData } from 'firebase/firestore';
+
 export interface GoogleLoginResponse {
   clientId: string;
   client_id: string;
@@ -16,7 +18,7 @@ export interface UserState extends User {
   allUsers: User[];
   userDataForChat: UserChatData[];
   showFindFriends: boolean;
-  currentChat: unknown[] | null;
+  currentChat: DocumentData | null;
   removeUsersFromFindFriends: string[];
   chats: Chat[];
 }
@@ -31,8 +33,9 @@ export interface UserChatData {
 
 export interface Message {
   message: string;
-  sub2: string;
+  sub2?: string;
   chatId: string;
+  sub?: string;
 }
 
 export interface Chat {
@@ -41,6 +44,6 @@ export interface Chat {
   sub2: string;
   sub1HasViewed: string;
   sub2HasViewed: string;
-  messages: string;
+  messages: Message[];
   user?: User;
 }

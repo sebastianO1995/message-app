@@ -20,21 +20,20 @@
         id="MessagesSection"
         class="pt-20 pb-8 z-[-1] h-[calc(100vh-65px)] w-[calc(100vw-420px)] overflow-auto fixed touch-auto"
       >
-        <div class="px-20 text-sm">
-          <div class="flex w-[calc(100%-50px)]">
-            <div class="inline-block bg-white p-2 rounded-md my-1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure amet
-              ipsa a veniam, ullam nam non expedita quibusdam? Quod enim porro
-              dolorem commodi ipsum tempore natus nostrum, nam earum quas.
+        <div v-if="currentChat?.length" class="px-20 text-sm">
+          <div v-for="msg in currentChat[0].messages" :key="msg">
+            <div v-if="msg.sub === sub" class="flex w-[calc(100%-50px)]">
+              <div class="inline-block bg-white p-2 rounded-md my-1">
+                {{ msg.message }}
+              </div>
             </div>
-          </div>
-          <div
-            class="flex justify-end space-x-1 w-[calc(100%-50px)] float-right"
-          >
-            <div class="inline-block bg-green-200 p-2 rounded-md my-1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure amet
-              ipsa a veniam, ullam nam non expedita quibusdam? Quod enim porro
-              dolorem commodi ipsum tempore natus nostrum, nam earum quas.
+            <div
+              class="flex justify-end space-x-1 w-[calc(100%-50px)] float-right"
+              v-else
+            >
+              <div class="inline-block bg-green-200 p-2 rounded-md my-1">
+                {{ msg.message }}
+              </div>
             </div>
           </div>
         </div>
@@ -48,12 +47,16 @@
           />
           <PaperclipIcon :size="27" class="mx-1.5 mr-3" fill-color="#515151" />
           <input
+            v-model="message"
             type="text"
             autocomplete="off"
             placeholder="Message"
             class="mr-1 rounded-lg shadow appearance-none w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
-          <button class="ml-3 p-2 w-12 flex items-center justify-center">
+          <button
+            @click="sendMessage"
+            class="ml-3 p-2 w-12 flex items-center justify-center"
+          >
             <SendIcon fill-color="#515151" />
           </button>
         </div>
@@ -66,6 +69,22 @@
   import EmoticonExcitedOutlineIcon from 'vue3-material-design-icons-ts/dist/EmoticonExcitedOutline.vue';
   import PaperclipIcon from 'vue3-material-design-icons-ts/dist/Paperclip.vue';
   import SendIcon from 'vue3-material-design-icons-ts/dist/Send.vue';
+  import { useUserStore } from '@/store/user-store';
+
+  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
+
+  const message = ref('');
+  const userStore = useUserStore();
+  const { userDataForChat, currentChat, sub } = storeToRefs(userStore);
+  const sendMessage = async () => {
+    await userStore.sendMessage({
+      message: message.value,
+      sub2: userDataForChat.value[0].sub2,
+      chatId: userDataForChat.value[0].id
+    });
+    message.value = '';
+  };
 </script>
 <style scoped>
   #BG {

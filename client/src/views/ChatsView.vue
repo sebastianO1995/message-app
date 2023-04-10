@@ -22,7 +22,11 @@
 
   onMounted(async () => {
     if (userDataForChat.value.length) {
-      await userStore.getChatById(userDataForChat.value[0].id);
+      try {
+        await userStore.getChatById(userDataForChat.value[0].id);
+      } catch (error) {
+        console.log('ChatsView ', error);
+      }
     }
   });
   const openChat = async (chat: Chat) => {

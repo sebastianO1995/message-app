@@ -93,10 +93,10 @@ export const useUserStore = defineStore('user', {
     },
 
     async getChatById(id: string) {
-      onSnapshot(doc(db, 'chat', id), (doc) => {
+      onSnapshot(doc(db, `chat/${id}`), (doc) => {
         const res = [];
         res.push(doc.data());
-        console.log(res);
+
         this.currentChat = res;
       });
     },
