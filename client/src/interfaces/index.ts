@@ -36,6 +36,7 @@ export interface Message {
   sub2?: string;
   chatId: string;
   sub?: string;
+  createdAt?: string;
 }
 
 export interface Chat {
